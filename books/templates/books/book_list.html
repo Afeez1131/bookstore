@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+
+{% block title %}
+    Book List Page
+{% endblock title %}
+    
+
+{% block content %}
+    <h2>Book List Page</h2>
+    
+    {% for book in books %}
+    <div>
+        <h2><a href="{{book.get_absolute_url}}">{{book.title|title}}</a></h2>
+        <p>{{book.author}}</p>
+        <p>Price: #{{book.price}}</p>
+        <p>{{book.description|truncatewords:30}}</p>
+        </div>
+    {% endfor %}
+        
+{% endblock content %}
+    
