@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+
+
+{% block title %}
+    Search Result Page
+{% endblock title %}
+    
+{% block content %}
+    <p>welcome to the search result page</p> 
+    <form class="form-inline mt-2 mt-md-0" action="{% url 'search_results' %}" method="get"> 
+        <input name="query" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+    <input type="submit" value="Search">
+    </form>
+
+{% with search_result_list.count as total_result %}
+        {{total_result}} result{{total_result|pluralize}} Found
+{% endwith %}
+        
+    {% for book in search_result_list %}
+        <h1><a href="{{book.get_absolute_url}}">{{book.title}}</a></h1>
+        <p>{{book.author}}</p>
+    {% empty %}
+    <p>No result for query</p>
+    {% endfor %}
+    
+        
+{% endblock content %}
+        

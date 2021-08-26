@@ -1,5 +1,5 @@
 {% extends '_base.html' %}
-
+load static
 {% block title %}
     Book Details Page
 {% endblock title %}
@@ -8,6 +8,14 @@
 {% block content %}
     
         <h2>{{book.title}}</h2>
+        
+        {% if book.cover %}
+            <img src="{{ book.cover.url }}" alt="{{book.title}}" class="bookcover">
+        {% else %}
+        <i>Book cover image</i>
+        {% endif %}
+            
+        
         <p>Author:{{book.author}}</p>
         <p>Price: #{{book.price}}</p>
         <p>Description: {{book.description}}</p>

@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase, client
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
 from .models import Book, Review
 
 # Create your tests here.
@@ -32,13 +33,28 @@ class BooksAppTest(TestCase):
         self.assertEqual(self.book.price, '134.5')
 
     def test_book_list_view(self):
+        self.client.login(email='testuser@gmail.com',
+                          password='testpass123')
         response = self.client.get(reverse('book_list'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'books/book_list.html')
         self.assertContains(response, 'Price')
         self.assertNotContains(response, 'text not on the book list page')
 
+    def test_book_list_view_for_logged_out_user(self):
+        self.client.logout()
+        response = self.client.get(reverse('book_list'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'books/book_list.html')
+        self.assertRedirects(response, '%s?next=/books/' %
+                             (reverse('account_login')))
+        response = self.client.get('%s?next=/books/' %
+                                   (reverse('account_login')))
+        self.assertContains(response, 'Log In')
+
     def test_book_detail_view(self):
+        self.client.login(email='testuser@gmail.com',
+                          password='testpass123')
         response = self.client.get(self.book.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'books/book_detail.html')

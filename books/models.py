@@ -12,6 +12,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     price = models.DecimalField(decimal_places=2, max_digits=6)
     description = models.TextField()
+    cover = models.ImageField(upload_to='covers/', blank=True)
 
     def __str__(self):
         return self.title
@@ -19,7 +20,10 @@ class Book(models.Model):
     def get_absolute_url(self):
 
         return reverse('book_detail', kwargs={'pk': self.pk})
-
+    # class Meta:
+    #     permissions = [
+    #         ('special_status', 'Can view book'),
+    #     ]
 
 class Review(models.Model):
     book = models.ForeignKey(
